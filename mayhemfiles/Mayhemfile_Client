@@ -1,0 +1,6 @@
+project: TLS-poison
+target: client
+duration: 90
+
+cmds:
+    - cmd: /client

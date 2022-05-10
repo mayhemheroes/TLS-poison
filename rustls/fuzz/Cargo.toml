@@ -8,6 +8,9 @@ publish = false
 [package.metadata]
 cargo-fuzz = true
 
+[dependencies]
+webpki = "0.21.0"
+
 [dependencies.rustls]
 path = ".."
 [dependencies.libfuzzer-sys]

@@ -1,0 +1,6 @@
+project: TLS-poison
+target: message
+duration: 90
+
+cmds:
+    - cmd: /message
