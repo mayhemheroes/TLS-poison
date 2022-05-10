@@ -1,0 +1,6 @@
+project: TLS-poison
+target: deframer
+duration: 90
+
+cmds:
+    - cmd: /deframer

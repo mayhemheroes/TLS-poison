@@ -1,0 +1,6 @@
+project: TLS-poison
+target: hsjoiner
+duration: 90
+
+cmds:
+    - cmd: /hsjoiner

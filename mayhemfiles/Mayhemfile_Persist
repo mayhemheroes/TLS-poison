@@ -1,0 +1,6 @@
+project: TLS-poison
+target: persist
+duration: 90
+
+cmds:
+    - cmd: /persist

@@ -1,0 +1,26 @@
+# Build Stage
+FROM --platform=linux/amd64 ubuntu:22.04 as builder
+
+ENV DEBIAN_FRONTEND=noninteractive
+## Install build dependencies.
+RUN apt-get update && apt-get install -y cmake clang llvm curl
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+RUN . $HOME/.cargo/env
+RUN ~/.cargo/bin/rustup default nightly
+RUN ~/.cargo/bin/cargo install cargo-fuzz
+
+## Add source code to the build stage.
+ADD . /TLS-poison/
+
+WORKDIR /TLS-poison/rustls/fuzz/
+RUN ~/.cargo/bin/cargo fuzz build
+
+FROM --platform=linux/amd64 ubuntu:22.04
+
+COPY --from=builder /TLS-poison/rustls/fuzz/target/x86_64-unknown-linux-gnu/release/client /
+COPY --from=builder /TLS-poison/rustls/fuzz/target/x86_64-unknown-linux-gnu/release/deframer /
+COPY --from=builder /TLS-poison/rustls/fuzz/target/x86_64-unknown-linux-gnu/release/fragment /
+COPY --from=builder /TLS-poison/rustls/fuzz/target/x86_64-unknown-linux-gnu/release/hsjoiner /
+COPY --from=builder /TLS-poison/rustls/fuzz/target/x86_64-unknown-linux-gnu/release/message /
+COPY --from=builder /TLS-poison/rustls/fuzz/target/x86_64-unknown-linux-gnu/release/persist /
+COPY --from=builder /TLS-poison/rustls/fuzz/target/x86_64-unknown-linux-gnu/release/server /
